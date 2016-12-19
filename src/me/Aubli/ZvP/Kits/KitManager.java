@@ -25,8 +25,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.Potion;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.util.File.Converter.FileConverter.FileType;
+import org.util.Potion.PotionLayer;
 
 
 public class KitManager {
@@ -154,7 +155,7 @@ public class KitManager {
 	// splash portion of healing I causes illegal argument exception -> replace it with splash potion of healing II
 	for (ItemStack stack : items) {
 	    if (stack != null && stack.getType() != Material.AIR) {
-		if (stack.getType() == Material.POTION) {
+		if (stack.getItemMeta() instanceof PotionMeta) {
 		    if (stack.getDurability() == 16453) {
 			stack.setDurability((short) 16421);
 		    }
@@ -201,12 +202,11 @@ public class KitManager {
 		lore.add(ChatColor.GOLD + "Content:");
 
 		for (ItemStack stack : kit.getContents()) {
-
 		    lore.add(ChatColor.DARK_GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
 
-		    if (stack.getType() == Material.POTION) {
-			Potion p = Potion.fromItemStack(stack);
-			lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
+		    if (stack.getItemMeta() instanceof PotionMeta) {
+			PotionLayer potionLayer = PotionLayer.fromItemStack(stack);
+			lore.add(ChatColor.DARK_BLUE + "  -" + potionLayer.getType().name() + " L" + potionLayer.getLevel());
 		    }
 
 		    Map<Enchantment, Integer> enchs = stack.getEnchantments();
